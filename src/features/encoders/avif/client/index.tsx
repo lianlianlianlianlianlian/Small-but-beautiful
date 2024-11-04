@@ -176,7 +176,7 @@ export class Options extends Component<Props, State> {
     return (
       <form class={style.optionsSection} onSubmit={preventDefault}>
         <label class={style.optionToggle}>
-          Lossless
+          无损
           <Checkbox
             checked={lossless}
             onChange={this._inputChange('lossless', 'boolean')}
