@@ -13,7 +13,7 @@
 import { h } from 'preact';
 
 import { renderPage, writeFiles } from './utils';
-import IndexPage from './pages/index';
+import IndexPage from './pages/index/index';
 import * as iconLargeMaskable from 'img-url:static-build/assets/icon-large-maskable.png';
 import * as iconLarge from 'img-url:static-build/assets/icon-large.png';
 import * as screenshot1 from 'img-url:static-build/assets/screenshot1.png';
