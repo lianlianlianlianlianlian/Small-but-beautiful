@@ -44,10 +44,7 @@ export class Options extends Component<Props, State> {
     const { options } = this.props;
 
     const newOptions: EncodeOptions = {
-      // Copy over options the form doesn't currently care about, eg arithmetic
       ...this.props.options,
-      // And now stuff from the form:
-      // .checked
       baseline: inputFieldChecked(form.baseline, options.baseline),
       progressive: inputFieldChecked(form.progressive, options.progressive),
       optimize_coding: inputFieldChecked(
@@ -74,7 +71,6 @@ export class Options extends Component<Props, State> {
         form.separate_chroma_quality,
         options.separate_chroma_quality,
       ),
-      // .value
       quality: inputFieldValueAsNumber(form.quality, options.quality),
       chroma_quality: inputFieldValueAsNumber(
         form.chroma_quality,
@@ -102,8 +98,6 @@ export class Options extends Component<Props, State> {
   };
 
   render({ options }: Props, { showAdvanced }: State) {
-    // I'm rendering both lossy and lossless forms, as it becomes much easier when
-    // gathering the data.
     return (
       <form class={style.optionsSection} onSubmit={preventDefault}>
         <div class={style.optionOneCell}>
@@ -114,7 +108,7 @@ export class Options extends Component<Props, State> {
             value={options.quality}
             onInput={this.onChange}
           >
-            Quality:
+            质量:
           </Range>
         </div>
         <label class={style.optionReveal}>
@@ -122,19 +116,19 @@ export class Options extends Component<Props, State> {
             checked={showAdvanced}
             onChange={linkState(this, 'showAdvanced')}
           />
-          Advanced settings
+          高级设置
         </label>
         <Expander>
           {showAdvanced ? (
             <div>
               <label class={style.optionTextFirst}>
-                Channels:
+                颜色通道:
                 <Select
                   name="color_space"
                   value={options.color_space}
                   onChange={this.onChange}
                 >
-                  <option value={MozJpegColorSpace.GRAYSCALE}>Grayscale</option>
+                  <option value={MozJpegColorSpace.GRAYSCALE}>灰度</option>
                   <option value={MozJpegColorSpace.RGB}>RGB</option>
                   <option value={MozJpegColorSpace.YCbCr}>YCbCr</option>
                 </Select>
@@ -143,7 +137,7 @@ export class Options extends Component<Props, State> {
                 {options.color_space === MozJpegColorSpace.YCbCr ? (
                   <div>
                     <label class={style.optionToggle}>
-                      Auto subsample chroma
+                      自动色度子采样
                       <Checkbox
                         name="auto_subsample"
                         checked={options.auto_subsample}
@@ -160,13 +154,13 @@ export class Options extends Component<Props, State> {
                             value={options.chroma_subsample}
                             onInput={this.onChange}
                           >
-                            Subsample chroma by:
+                            色度子采样比:
                           </Range>
                         </div>
                       )}
                     </Expander>
                     <label class={style.optionToggle}>
-                      Separate chroma quality
+                      独立色度质量
                       <Checkbox
                         name="separate_chroma_quality"
                         checked={options.separate_chroma_quality}
@@ -183,7 +177,7 @@ export class Options extends Component<Props, State> {
                             value={options.chroma_quality}
                             onInput={this.onChange}
                           >
-                            Chroma quality:
+                            色度质量:
                           </Range>
                         </div>
                       ) : null}
@@ -192,7 +186,7 @@ export class Options extends Component<Props, State> {
                 ) : null}
               </Expander>
               <label class={style.optionToggle}>
-                Pointless spec compliance
+                无意义的规格兼容
                 <Checkbox
                   name="baseline"
                   checked={options.baseline}
@@ -202,7 +196,7 @@ export class Options extends Component<Props, State> {
               <Expander>
                 {options.baseline ? null : (
                   <label class={style.optionToggle}>
-                    Progressive rendering
+                    渐进式渲染
                     <Checkbox
                       name="progressive"
                       checked={options.progressive}
@@ -214,7 +208,7 @@ export class Options extends Component<Props, State> {
               <Expander>
                 {options.baseline ? (
                   <label class={style.optionToggle}>
-                    Optimize Huffman table
+                    优化霍夫曼表
                     <Checkbox
                       name="optimize_coding"
                       checked={options.optimize_coding}
@@ -231,29 +225,41 @@ export class Options extends Component<Props, State> {
                   value={options.smoothing}
                   onInput={this.onChange}
                 >
-                  Smoothing:
+                  平滑:
                 </Range>
               </div>
               <label class={style.optionTextFirst}>
-                Quantization:
+                量化:
                 <Select
                   name="quant_table"
                   value={options.quant_table}
                   onChange={this.onChange}
                 >
-                  <option value="0">JPEG Annex K</option>
-                  <option value="1">Flat</option>
-                  <option value="2">MSSIM-tuned Kodak</option>
-                  <option value="3">ImageMagick</option>
-                  <option value="4">PSNR-HVS-M-tuned Kodak</option>
-                  <option value="5">Klein et al</option>
-                  <option value="6">Watson et al</option>
-                  <option value="7">Ahumada et al</option>
-                  <option value="8">Peterson et al</option>
+                  <option value="0">JPEG 附录 K（标准 JPEG 量化表）</option>
+                  <option value="1">平整（提供均衡质量的量化表）</option>
+                  <option value="2">
+                    基于 MSSIM 调整的柯达模式（优化结构相似性以减少视觉失真）
+                  </option>
+                  <option value="3">
+                    ImageMagick（经典图像处理工具的量化表）
+                  </option>
+                  <option value="4">
+                    基于 PSNR-HVS-M 调整的柯达模式（优化人眼视觉的峰值信噪比）
+                  </option>
+                  <option value="5">Klein et al（以保留高频细节为主）</option>
+                  <option value="6">
+                    Watson et al（适用于低噪声和细腻图像）
+                  </option>
+                  <option value="7">
+                    Ahumada et al（视觉模型基于人眼敏感度）
+                  </option>
+                  <option value="8">
+                    Peterson et al（平衡压缩率和视觉质量）
+                  </option>
                 </Select>
               </label>
               <label class={style.optionToggle}>
-                Trellis multipass
+                网格多重处理
                 <Checkbox
                   name="trellis_multipass"
                   checked={options.trellis_multipass}
@@ -263,7 +269,7 @@ export class Options extends Component<Props, State> {
               <Expander>
                 {options.trellis_multipass ? (
                   <label class={style.optionToggle}>
-                    Optimize zero block runs
+                    对零块运行进行优化
                     <Checkbox
                       name="trellis_opt_zero"
                       checked={options.trellis_opt_zero}
@@ -273,7 +279,7 @@ export class Options extends Component<Props, State> {
                 ) : null}
               </Expander>
               <label class={style.optionToggle}>
-                Optimize after trellis quantization
+                在网格量化后优化
                 <Checkbox
                   name="trellis_opt_table"
                   checked={options.trellis_opt_table}
@@ -288,7 +294,7 @@ export class Options extends Component<Props, State> {
                   value={options.trellis_loops}
                   onInput={this.onChange}
                 >
-                  Trellis quantization passes:
+                  网格量化次数:
                 </Range>
               </div>
             </div>

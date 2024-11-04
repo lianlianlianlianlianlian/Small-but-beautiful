@@ -232,35 +232,51 @@ export class Options extends Component<Props, State> {
         onSubmit={preventDefault}
       >
         <label class={style.optionTextFirst}>
-          Method:
+          算法:
           <Select
             name="resizeMethod"
             value={options.method}
             onChange={this.onChange}
           >
-            {isVector && <option value="vector">Vector</option>}
-            <option value="lanczos3">Lanczos3</option>
-            <option value="mitchell">Mitchell</option>
-            <option value="catrom">Catmull-Rom</option>
-            <option value="triangle">Triangle (bilinear)</option>
-            <option value="hqx">hqx (pixel art)</option>
-            <option value="browser-pixelated">Browser pixelated</option>
-            <option value="browser-low">Browser low quality</option>
-            <option value="browser-medium">Browser medium quality</option>
-            <option value="browser-high">Browser high quality</option>
+            {isVector && <option value="vector">矢量</option>}
+            <option value="lanczos3">
+              Lanczos3（高质量的重采样算法，适用于缩放图像时保持细节）
+            </option>
+            <option value="mitchell">
+              Mitchell（具有平滑和锐利特性的重采样算法）
+            </option>
+            <option value="catrom">
+              Catmull-Rom（适合图像缩放，能平滑处理边缘的重采样算法）
+            </option>
+            <option value="triangle">
+              Triangle（双线性插值，简单且速度快的重采样算法）
+            </option>
+            <option value="hqx">hqx（用于像素艺术图像的高质量放大算法）</option>
+            <option value="browser-pixelated">
+              Browser pixelated（在浏览器中显示时保持像素化效果）
+            </option>
+            <option value="browser-low">
+              Browser low quality（低质量设置，适合快速加载）
+            </option>
+            <option value="browser-medium">
+              Browser medium quality（中等质量设置，平衡性能和画质）
+            </option>
+            <option value="browser-high">
+              Browser high quality（高质量设置，提供最佳画质）
+            </option>
           </Select>
         </label>
         <label class={style.optionTextFirst}>
-          Preset:
+          预设:
           <Select value={this.getPreset()} onChange={this.onPresetChange}>
             {sizePresets.map((preset) => (
               <option value={preset}>{preset * 100}%</option>
             ))}
-            <option value="custom">Custom</option>
+            <option value="custom">自定义</option>
           </Select>
         </label>
         <label class={style.optionTextFirst}>
-          Width:
+          宽度:
           <input
             required
             class={style.textField}
@@ -272,7 +288,7 @@ export class Options extends Component<Props, State> {
           />
         </label>
         <label class={style.optionTextFirst}>
-          Height:
+          高度:
           <input
             required
             class={style.textField}
@@ -286,7 +302,7 @@ export class Options extends Component<Props, State> {
         <Expander>
           {isWorkerOptions(options) ? (
             <label class={style.optionToggle}>
-              Premultiply alpha channel
+              预乘 Alpha 通道
               <Checkbox
                 name="premultiply"
                 checked={options.premultiply}
@@ -296,7 +312,7 @@ export class Options extends Component<Props, State> {
           ) : null}
           {isWorkerOptions(options) ? (
             <label class={style.optionToggle}>
-              Linear RGB
+              线性 RGB
               <Checkbox
                 name="linearRGB"
                 checked={options.linearRGB}
@@ -306,7 +322,7 @@ export class Options extends Component<Props, State> {
           ) : null}
         </Expander>
         <label class={style.optionToggle}>
-          Maintain aspect ratio
+          保持纵横比
           <Checkbox
             name="maintainAspect"
             checked={maintainAspect}
@@ -316,14 +332,14 @@ export class Options extends Component<Props, State> {
         <Expander>
           {maintainAspect ? null : (
             <label class={style.optionTextFirst}>
-              Fit method:
+              适配方式:
               <Select
                 name="fitMethod"
                 value={options.fitMethod}
                 onChange={this.onChange}
               >
-                <option value="stretch">Stretch</option>
-                <option value="contain">Contain</option>
+                <option value="stretch">拉伸</option>
+                <option value="contain">容纳</option>
               </Select>
             </label>
           )}

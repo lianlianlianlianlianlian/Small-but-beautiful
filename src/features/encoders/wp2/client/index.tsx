@@ -11,6 +11,7 @@ import Expander from 'client/lazy-app/Compress/Options/Expander';
 import linkState from 'linkstate';
 import Revealer from 'client/lazy-app/Compress/Options/Revealer';
 
+// 编码函数
 export const encode = (
   signal: AbortSignal,
   workerBridge: WorkerBridge,
@@ -19,25 +20,25 @@ export const encode = (
 ) => workerBridge.wp2Encode(signal, imageData, options);
 
 interface Props {
-  options: EncodeOptions;
-  onChange(newOptions: EncodeOptions): void;
+  options: EncodeOptions; // 选项
+  onChange(newOptions: EncodeOptions): void; // 当选项变化时的回调
 }
 
 interface State {
-  options: EncodeOptions;
-  effort: number;
-  quality: number;
-  alphaQuality: number;
-  passes: number;
-  sns: number;
-  uvMode: number;
-  lossless: boolean;
-  slightLoss: number;
-  colorSpace: number;
-  errorDiffusion: number;
-  useRandomMatrix: boolean;
-  showAdvanced: boolean;
-  separateAlpha: boolean;
+  options: EncodeOptions; // 选项
+  effort: number; // 努力程度
+  quality: number; // 质量
+  alphaQuality: number; // alpha 质量
+  passes: number; // 传递次数
+  sns: number; // 空间噪声塑形
+  uvMode: number; // UV 模式
+  lossless: boolean; // 是否无损
+  slightLoss: number; // 轻微损失
+  colorSpace: number; // 色彩空间
+  errorDiffusion: number; // 错误扩散
+  useRandomMatrix: boolean; // 是否使用随机矩阵
+  showAdvanced: boolean; // 是否显示高级设置
+  separateAlpha: boolean; // 是否分离 alpha
 }
 
 export class Options extends Component<Props, State> {
@@ -64,7 +65,7 @@ export class Options extends Component<Props, State> {
       separateAlpha: options.quality !== options.alpha_quality,
     };
 
-    // If quality is > 95, it's lossless with slight loss
+    // 如果质量 > 95，则为无损且轻微损失
     if (options.quality > 95) {
       modifyState.lossless = true;
       modifyState.slightLoss = 100 - options.quality;
@@ -76,7 +77,7 @@ export class Options extends Component<Props, State> {
     return modifyState;
   }
 
-  // Other state is set in getDerivedStateFromProps
+  // 其他状态在 getDerivedStateFromProps 中设置
   state: State = {
     lossless: false,
     slightLoss: 0,
@@ -87,7 +88,7 @@ export class Options extends Component<Props, State> {
   private _inputChangeCallbacks = new Map<string, (event: Event) => void>();
 
   private _inputChange = (prop: keyof State, type: 'number' | 'boolean') => {
-    // Cache the callback for performance
+    // 缓存回调以提高性能
     if (!this._inputChangeCallbacks.has(prop)) {
       this._inputChangeCallbacks.set(prop, (event: Event) => {
         const formEl = event.target as HTMLInputElement | HTMLSelectElement;
@@ -123,7 +124,7 @@ export class Options extends Component<Props, State> {
           use_random_matrix: optionState.useRandomMatrix,
         };
 
-        // Updating options, so we don't recalculate in getDerivedStateFromProps.
+        // 更新选项，因此我们不需要在 getDerivedStateFromProps 中重新计算。
         newState.options = newOptions;
 
         this.setState(newState);
@@ -156,7 +157,7 @@ export class Options extends Component<Props, State> {
     return (
       <form class={style.optionsSection} onSubmit={preventDefault}>
         <label class={style.optionToggle}>
-          Lossless
+          无损
           <Checkbox
             checked={lossless}
             onChange={this._inputChange('lossless', 'boolean')}
@@ -172,7 +173,7 @@ export class Options extends Component<Props, State> {
                 value={slightLoss}
                 onInput={this._inputChange('slightLoss', 'number')}
               >
-                Slight loss:
+                轻微损失:
               </Range>
             </div>
           )}
@@ -188,11 +189,11 @@ export class Options extends Component<Props, State> {
                   value={quality}
                   onInput={this._inputChange('quality', 'number')}
                 >
-                  Quality:
+                  质量:
                 </Range>
               </div>
               <label class={style.optionToggle}>
-                Separate alpha quality
+                分离透明度质量
                 <Checkbox
                   checked={separateAlpha}
                   onChange={this._inputChange('separateAlpha', 'boolean')}
@@ -208,7 +209,7 @@ export class Options extends Component<Props, State> {
                       value={alphaQuality}
                       onInput={this._inputChange('alphaQuality', 'number')}
                     >
-                      Alpha Quality:
+                      透明度质量:
                     </Range>
                   </div>
                 )}
@@ -218,7 +219,7 @@ export class Options extends Component<Props, State> {
                   checked={showAdvanced}
                   onChange={linkState(this, 'showAdvanced')}
                 />
-                Advanced settings
+                高级设置
               </label>
               <Expander>
                 {showAdvanced && (
@@ -231,7 +232,7 @@ export class Options extends Component<Props, State> {
                         value={passes}
                         onInput={this._inputChange('passes', 'number')}
                       >
-                        Passes:
+                        次数:
                       </Range>
                     </div>
                     <div class={style.optionOneCell}>
@@ -242,7 +243,7 @@ export class Options extends Component<Props, State> {
                         value={sns}
                         onInput={this._inputChange('sns', 'number')}
                       >
-                        Spatial noise shaping:
+                        空间噪声塑形:
                       </Range>
                     </div>
                     <div class={style.optionOneCell}>
@@ -253,23 +254,23 @@ export class Options extends Component<Props, State> {
                         value={errorDiffusion}
                         onInput={this._inputChange('errorDiffusion', 'number')}
                       >
-                        Error diffusion:
+                        错误扩散:
                       </Range>
                     </div>
                     <label class={style.optionTextFirst}>
-                      Subsample chroma:
+                      子采样色度:
                       <Select
                         value={uvMode}
                         onInput={this._inputChange('uvMode', 'number')}
                       >
-                        <option value={UVMode.UVModeAuto}>Auto</option>
-                        <option value={UVMode.UVModeAdapt}>Vary</option>
-                        <option value={UVMode.UVMode420}>Half</option>
-                        <option value={UVMode.UVMode444}>Off</option>
+                        <option value={UVMode.UVModeAuto}>自动</option>
+                        <option value={UVMode.UVModeAdapt}>变化</option>
+                        <option value={UVMode.UVMode420}>一半</option>
+                        <option value={UVMode.UVMode444}>关闭</option>
                       </Select>
                     </label>
                     <label class={style.optionTextFirst}>
-                      Color space:
+                      色彩空间:
                       <Select
                         value={colorSpace}
                         onInput={this._inputChange('colorSpace', 'number')}
@@ -280,7 +281,7 @@ export class Options extends Component<Props, State> {
                       </Select>
                     </label>
                     <label class={style.optionToggle}>
-                      Random matrix
+                      随机矩阵
                       <Checkbox
                         checked={useRandomMatrix}
                         onChange={this._inputChange(
@@ -295,17 +296,6 @@ export class Options extends Component<Props, State> {
             </div>
           )}
         </Expander>
-        <div class={style.optionOneCell}>
-          <Range
-            min="0"
-            max="9"
-            step="1"
-            value={effort}
-            onInput={this._inputChange('effort', 'number')}
-          >
-            Effort:
-          </Range>
-        </div>
       </form>
     );
   }
