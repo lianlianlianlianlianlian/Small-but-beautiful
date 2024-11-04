@@ -207,18 +207,18 @@ export default class Intro extends Component<Props, State> {
     try {
       clipboardItems = await navigator.clipboard.read();
     } catch (err) {
-      this.props.showSnack!(`No permission to access clipboard`);
+      this.props.showSnack!(`无法访问剪贴板权限`);
       return;
     }
 
     const blob = await getImageClipboardItem(clipboardItems);
 
     if (!blob) {
-      this.props.showSnack!(`No image found in the clipboard`);
+      this.props.showSnack!(`剪贴板中未找到图像`);
       return;
     }
 
-    this.props.onFile!(new File([blob], 'image.unknown'));
+    this.props.onFile!(new File([blob], '无法识别的图片格式'));
   };
 
   render(
