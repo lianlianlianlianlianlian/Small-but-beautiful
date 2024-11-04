@@ -1,5 +1,6 @@
-# [Squoosh]!
+# [Squoosh]!中文版
 
+个人翻译 不保证准确性 除了翻译和改了一些图片自定义 没做任何修改 如果你喜欢我的改动 欢迎使用！
 [Squoosh] is an image compression web app that reduces image sizes through numerous formats.
 
 # Privacy
@@ -37,6 +38,4 @@ Squoosh is an open-source project that appreciates all community involvement. To
 
 [squoosh]: https://squoosh.app
 
-# xiaoermei
 
-# xiaoermei
